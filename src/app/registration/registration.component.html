@@ -1,16 +1,16 @@
 <h3>Registro</h3>
-<form>
+<form [formGroup]="registrationForm" (ngSubmit)="registerUser()">
   <div>
     <label for="email">
       E-mail
     </label>
-    <input id="email" type="text">
+    <input id="email" type="text" formControlName="email">
   </div>
   <div>
     <label for="password">
       Contraseña
     </label>
-    <input id="password" type="password">
+    <input id="password" type="password" formControlName="password">
   </div>
   <button type="submit">Registrarse</button>
 </form>
