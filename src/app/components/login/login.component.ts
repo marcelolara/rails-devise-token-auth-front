@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
+
 import { AuthService } from '../../shared/auth.service';
 
 @Component({
@@ -12,7 +14,8 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private auth: AuthService
+    private auth: AuthService,
+    private router: Router
   ) {
     this.loginForm = this.fb.group({
       email: [''],
@@ -20,9 +23,12 @@ export class LoginComponent {
     })
   }
 
-  loginUser() {
+  login() {
     this.auth.login(this.loginForm.value).subscribe(res => {
-      console.log(res);
+      if (res.status == 200) {
+        localStorage.setItem('user', res.body.data)
+        this.router.navigate(['/user']);
+      }
     })
   }
 }
