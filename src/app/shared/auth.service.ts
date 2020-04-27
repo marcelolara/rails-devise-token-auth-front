@@ -17,8 +17,14 @@ export class AuthService {
   ) { }
 
   login( user: User ): Observable<HttpResponse<any>> {
-    return this.http.post<any>(`${ this.endpoint }/sign_in`, user, {observe: 'response'})
-      .pipe(catchError(this.handleError))
+    return this.http.post(`${ this.endpoint }/sign_in`, user, {observe: 'response'})
+      .pipe(
+        map(res => {
+          localStorage.setItem('access-token', res.headers.get('access-token'));
+          return res
+        }),
+        catchError(this.handleError)
+      )
   }
 
   /**

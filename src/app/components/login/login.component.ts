@@ -27,7 +27,7 @@ export class LoginComponent {
     this.auth.login(this.loginForm.value).subscribe(res => {
       if (res.status == 200) {
         localStorage.setItem('user', res.body.data)
-        this.router.navigate(['/user']);
+        // this.router.navigate(['/user']);
       }
     })
   }
