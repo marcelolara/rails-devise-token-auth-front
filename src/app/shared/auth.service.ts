@@ -5,22 +5,24 @@ import { Observable, throwError } from 'rxjs';
 
 import { User } from './user';
 import { catchError, map } from 'rxjs/operators';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  endpoint: string = 'http://localhost:3000/auth'
+  urlBase = environment.apiUrl + '/auth';
 
   constructor(
     private http: HttpClient
   ) { }
 
   login( user: User ): Observable<HttpResponse<any>> {
-    return this.http.post(`${ this.endpoint }/sign_in`, user, {observe: 'response'})
+    return this.http.post(`${ this.urlBase }/sign_in`, user, {observe: 'response' })
       .pipe(
         map(res => {
           localStorage.setItem('access-token', res.headers.get('access-token'));
+          localStorage.setItem('user', res.body['data']);
           return res
         }),
         catchError(this.handleError)
@@ -33,7 +35,7 @@ export class AuthService {
    * return Observable json
    */
   register( user: User ): Observable<any> {
-    return this.http.post(this.endpoint, user)
+    return this.http.post(this.urlBase, user)
       .pipe(catchError(this.handleError))
   }
 
